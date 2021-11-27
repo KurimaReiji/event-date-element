@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Element</title>
+  <style>
+    body { font-size: 1.125rem; }
+    p,body>div { margin: 1rem; }
+    pre { margin: 0;}
+  </style>
+</head>
+<body>
+  <p>曜日を間違えないようにするための Custom Element</p>
+
+  <div>
+    <pre>&lt;event-date startDate="2021-01-01"&gt;&lt;/event-date&gt;</pre>
+    <event-date startDate="2021-01-01"></event-date>
+  </div>
+  <div>
+    <pre>&lt;event-date&gt;明日&lt;/event-date&gt;</pre>
+    <event-date>明日</event-date>
+  </div>
+  <div>
+    <pre>&lt;event-date startDate="2021-01-01T18:55"&gt;&lt;/event-date&gt;</pre>
+    <event-date startDate="2021-01-01T18:55"></event-date>
+  </div>
+  <div>
+    <pre>&lt;event-date startDate="2021-10-25T08:40" duration="25"&gt;&lt;/event-date&gt;</pre>
+    <event-date startDate="2021-10-25T08:40" duration="25"></event-date>
+  </div>
+  <div>
+    <pre>&lt;event-date startDate="2021-01-01T18:55" duration="125"&gt;&lt;/event-date&gt;</pre>
+    <event-date startDate="2021-01-01T18:55" duration="125"></event-date>
+  </div>
+  <script>
+    class EventDate extends HTMLElement {
+      constructor() {
+        const jaDate = new Intl.DateTimeFormat("ja-JP",{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'short'});
+        const twoDigitTime = new Intl.DateTimeFormat("ja-JP",{ hour: '2-digit', minute: '2-digit', hour12: false,});
+
+        super();
+        const shadow = this.attachShadow({mode: 'open'});
+
+        const el = document.createElement('time');
+        if(!this.hasAttribute('startDate')) {
+          el.innerHTML = this.innerHTML;
+        }else{
+          const startDate = this.getAttribute('startDate');
+          const date = startDate + '1970-01-01T09:00+09:00'.slice(startDate.length);
+          el.setAttribute("datetime", startDate);
+          const d = new Date(date);
+          el.innerHTML = `${jaDate.format(d).replace(/[()]/g,(m)=>{ return {'(':'（',')':'）'}[m]})}`;
+          if(startDate.includes(":")) el.innerHTML += `${twoDigitTime.format(d)}`;
+          if(this.hasAttribute('duration')) {
+            d.setMinutes(d.getMinutes() + parseInt(this.getAttribute("duration")));
+            el.innerHTML += `-${twoDigitTime.format(d)}`;
+          };
+        }
+        shadow.appendChild(el);
+      }
+    };
+    customElements.define('event-date', EventDate);
+  </script>
+</body>
+</html>
