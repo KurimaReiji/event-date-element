@@ -7,3 +7,5 @@ Custom Element が使えるようになったときいて、試してみたも�
 client 側でやることなのかという疑問はあります。
 
 日本標準時以外の地域で閲覧した場合にも期待通りに表示されるか、ちょっと不安です。
+
+https://kurimareiji.github.io/event-date-element/wday.html
