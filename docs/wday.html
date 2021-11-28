@@ -36,7 +36,7 @@
   <script>
     class EventDate extends HTMLElement {
       constructor() {
-        const jaDate = new Intl.DateTimeFormat("ja-JP",{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' timeZone: 'Asia/Tokyo',});
+        const jaDate = new Intl.DateTimeFormat("ja-JP",{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'short', timeZone: 'Asia/Tokyo',});
         const twoDigitTime = new Intl.DateTimeFormat("ja-JP",{ hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Tokyo',});
 
         super();
